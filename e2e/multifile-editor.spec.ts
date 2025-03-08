@@ -29,6 +29,11 @@ test.describe('MultifileEditor Component', () => {
     const test_string = 'TestString';
     let index = 0;
     for (const editor of await editors.all()) {
+      // There are 2 monaco editor classes per active editor
+      // We ignore the one under overflowingContentWidgets for each open editor
+      const monacoEditor = page.locator('.monaco-editor').nth(index * 2);
+      // This hover is necessary to workaround playwright being unable to click on editor
+      await monacoEditor.hover();
       // For some reason the click event doesn't work on mobile
       if (isMobile) {
         await editor.focus();
